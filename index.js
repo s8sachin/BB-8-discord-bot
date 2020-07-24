@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 
 const getDefaultChannel = require('./utils/defaultChannel');
-const greetingMessage = require('./utils/greetingMessage');
+const { greetingMessage, bb8Info } = require('./utils/greetingMessage');
 
 require('dotenv').config();
 const { DISCORD_TOKEN, PREFIX } = process.env;
@@ -13,10 +13,11 @@ client.once('ready', () => {
 });
 
 client.on('message', message => {
-  if (message.content.toLowerCase === `${PREFIX}ping`) {
+  if (message.content.toLowerCase() === `${PREFIX}ping`) {
     message.channel.send('Pong.');
-  } else if (message.content === '!emitNewUser') {
-    client.emit('guildMemberAdd', message.member);
+  } else if (message.content === `${PREFIX}bb8`) {
+    // client.emit('guildMemberAdd', message.member);
+    message.channel.send(bb8Info);
   }
 });
 
