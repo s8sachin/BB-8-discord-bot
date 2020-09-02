@@ -27,7 +27,7 @@ client.on("voiceStateUpdate", (oldVoiceState, newVoiceState) => {
     console.log(newVoiceState, 'MEMBEr')
     const channel = getDefaultChannel(newVoiceState.guild);
     const gameName = newVoiceState.member.user.presence.activities.length && newVoiceState.member.user.presence.activities[0].name || 'their screen';
-    channel.send(`<@${newVoiceState.member.user.id}> is streaming ${gameName}. 🎥`)
+    channel.send(`Hi <@${newVoiceState.member.user.id}> is streaming ${gameName}. 🎥`)
   }
 });
 
