@@ -52,7 +52,7 @@ client.on('message', receivedMessage => {
     };
     xhr.send(null)
   } else {
-    receivedMessage.channel.send("Command not supported!")
+    // receivedMessage.channel.send("Command not supported!")
   }
 });
 
