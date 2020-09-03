@@ -2,68 +2,64 @@ const Discord = require('discord.js');
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 const getDefaultChannel = require('./utils/defaultChannel');
-const { greetingMessage, bb8Info } = require('./utils/greetingMessage');
+const {
+  greetingMessage,
+  bb8Info
+} = require('./utils/greetingMessage');
 
 require('dotenv').config();
-const { DISCORD_TOKEN, PREFIX, ZOMATO_TOKEN } = process.env;
+const {
+  DISCORD_TOKEN,
+  PREFIX,
+  ZOMATO_TOKEN
+} = process.env;
 
 const client = new Discord.Client();
 
 client.once('ready', () => {
-	console.log('Ready!');
+  console.log('Ready!');
 });
 
-client.on('message', receivedMessage =>
-{
-		const args = receivedMessage.content.slice(PREFIX.length).trim().split(/ +/)
-		const command = args.shift().toLowerCase();
-		console.log (command)
-		if (command === "ping")
-		{
-				receivedMessage.channel.send ("Pong.")
-		}
-		else if (command === "bb8")
-		{
-				receivedMessage.channel.send (bb8Info)
-		}
-		else if (command === "res")
-		{
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', 'https://developers.zomato.com/api/v2.1/locations?query=' + args.join (' '))
-        xhr.setRequestHeader("Accept", "application/json")
-        xhr.setRequestHeader("user-key", ZOMATO_TOKEN)
+client.on('message', receivedMessage => {
+  const args = receivedMessage.content.slice(PREFIX.length).trim().split(/ +/);
+  const command = args.shift().toLowerCase();
+  console.log(command)
+  if (command === "ping") {
+    receivedMessage.channel.send("Pong.")
+  } else if (command === "bb8") {
+    receivedMessage.channel.send(bb8Info)
+  } else if (command === "res") {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'https://developers.zomato.com/api/v2.1/locations?query=' + args.join(' '))
+    xhr.setRequestHeader("Accept", "application/json")
+    xhr.setRequestHeader("user-key", ZOMATO_TOKEN)
 
-        // Track the state changes of the request.
-        xhr.onreadystatechange = function ()
-				{
-		        var DONE = 4; // readyState 4 means the request is done.
-		        var OK = 200; // status 200 is a successful return.
-		        if (xhr.readyState === DONE)
-						{
-		            if (xhr.status === OK)
-								{
-		                var json = JSON.parse (xhr.responseText)
-		                var etype = json.location_suggestions[0].entity_type
-		                var eid = json.location_suggestions[0].entity_id
-										var title = json.location_suggestions[0].title
-										receivedMessage.channel.send (etype + " " + eid + " " + title)
-		            }
-								else
-								{
-		                console.log('Error: ' + xhr.status); // An error occurred during the request.
-		            }
-        		}
-        };
-        xhr.send (null)
-    }
-		else
-		{
-				receivedMessage.channel.send ("Command not supported!")
-		}
+    // Track the state changes of the request.
+    xhr.onreadystatechange = function () {
+      var DONE = 4; // readyState 4 means the request is done.
+      var OK = 200; // status 200 is a successful return.
+      if (xhr.readyState === DONE) {
+        if (xhr.status === OK) {
+          var json = JSON.parse(xhr.responseText)
+          var etype = json.location_suggestions[0].entity_type
+          var eid = json.location_suggestions[0].entity_id
+          var title = json.location_suggestions[0].title
+          receivedMessage.channel.send(etype + " " + eid + " " + title)
+        } else {
+          console.log('Error: ' + xhr.status); // An error occurred during the request.
+        }
+      }
+    };
+    xhr.send(null)
+  } else {
+    receivedMessage.channel.send("Command not supported!")
+  }
 });
 
 client.on("voiceStateUpdate", (oldVoiceState, newVoiceState) => {
-  if (!newVoiceState) {return false}
+  if (!newVoiceState) {
+    return false
+  }
   if (newVoiceState.streaming) {
     console.log(newVoiceState, 'MEMBEr')
     const channel = getDefaultChannel(newVoiceState.guild);
