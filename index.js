@@ -15,6 +15,10 @@ client.once('ready', () => {
 
 client.on('message', receivedMessage =>
 {
+		if (receivedMessage.author == client.user)
+		{
+				return      // message sent by bot itself, just return
+		}
 		const args = receivedMessage.content.slice(PREFIX.length).trim().split(/ +/)
 		const command = args.shift().toLowerCase();
 		console.log (command)
