@@ -41,6 +41,7 @@ client.on('message', message => {
                       var json = JSON.parse (xhr.responseText)
                       var etype = json.location_suggestions[0].entity_type
                       var eid = json.location_suggestions[0].entity_id
+											receivedMessage.channel.send (etype + " " + eid)
                   } else {
                       console.log('Error: ' + xhr.status); // An error occurred during the request.
                     }
